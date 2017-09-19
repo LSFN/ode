@@ -26,8 +26,10 @@ func (t TriMeshData) c() C.dTriMeshDataID {
 }
 
 var (
-	vertexListMap = map[int]VertexList{}
-	indexListMap  = map[int]TriVertexIndexList{}
+	vertexListMap  = map[int]VertexList{}
+	indexListMap   = map[int]TriVertexIndexList{}
+	vertexListMap2 = map[int][]float32{}
+	indexListMap2  = map[int][]uint32{}
 )
 
 // NewTriMeshData returns a new TriMeshData instance.
@@ -50,6 +52,14 @@ func (t TriMeshData) Build(verts VertexList, tris TriVertexIndexList) {
 		(*C.dTriIndex)(&tris[0][0]), C.int(len(tris)*3))
 	vertexListMap[int(t)] = verts // avoid GC mark and sweep
 	indexListMap[int(t)] = tris   // avoid GC mark and sweep
+}
+
+func (t TriMeshData) BuildSingle(vertexData []float32, vertexCount int, vertexStride int, indexData []uint32, indexCount int, indexStride int) {
+	delete(vertexListMap2, int(t))
+	delete(indexListMap2, int(t))
+	C.dGeomTriMeshDataBuildSingle(t.c(), unsafe.Pointer(&vertexData[0]), C.int(vertexStride), C.int(vertexCount), unsafe.Pointer(&indexData[0]), C.int(indexCount), C.int(indexStride))
+	vertexListMap2[int(t)] = vertexData // avoid GC mark and sweep
+	indexListMap2[int(t)] = indexData   // avoid GC mark and sweep
 }
 
 // Preprocess preprocesses the triangle mesh data.

@@ -218,6 +218,10 @@ func NewTriVertexIndexList(size int, indices ...uint32) TriVertexIndexList {
 // PolygonList represents a list of polygon definitions
 type PolygonList []C.uint
 
+func GetConfiguration() string {
+	return C.GoString(C.dGetConfiguration())
+}
+
 // Init initializes ODE.
 func Init(initFlags, allocFlags int) {
 	C.dInitODE2(C.uint(initFlags))

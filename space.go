@@ -159,6 +159,18 @@ func (s SpaceBase) Collide(data interface{}, cb NearCallback) {
 		(*C.dNearCallback)(C.callNearCallback))
 }
 
+func (s SpaceBase) c2() C.dGeomID {
+	return C.dGeomID(unsafe.Pointer(s))
+}
+
+func (s SpaceBase) Collide2(other SimpleSpace, data interface{}, cb NearCallback) {
+	cbData := &nearCallbackData{fn: cb, data: data}
+	index := nearCallbackDataMap.Set(cbData)
+	defer nearCallbackDataMap.Delete(index)
+	C.dSpaceCollide2(s.c2(), other.c2(), unsafe.Pointer(uintptr(index)),
+		(*C.dNearCallback)(C.callNearCallback))
+}
+
 // NewSphere returns a new Sphere instance.
 func (s SpaceBase) NewSphere(radius float64) Sphere {
 	return cToGeom(C.dCreateSphere(s.c(), C.dReal(radius))).(Sphere)

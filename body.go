@@ -6,6 +6,8 @@ import "C"
 
 import (
 	"unsafe"
+
+	"github.com/go-gl/mathgl/mgl32"
 )
 
 var (
@@ -131,6 +133,30 @@ func (b Body) Position() Vector3 {
 	pos := NewVector3()
 	C.dBodyCopyPosition(b.c(), (*C.dReal)(&pos[0]))
 	return pos
+}
+
+// MatrixOpenGL returns a valid opengl matrix of position and rotation.
+func (b Body) MatrixOpenGL() mgl32.Mat4 {
+	m := mgl32.Ident4()
+	pos := b.Position()
+	rot := b.Rotation()
+
+	m[0] = float32(rot[0][0])
+	m[1] = float32(rot[1][0])
+	m[2] = float32(rot[2][0])
+
+	m[4] = float32(rot[0][1])
+	m[5] = float32(rot[1][1])
+	m[6] = float32(rot[2][1])
+
+	m[8] = float32(rot[0][2])
+	m[9] = float32(rot[1][2])
+	m[10] = float32(rot[2][2])
+
+	m[12] = float32(pos[0])
+	m[13] = float32(pos[1])
+	m[14] = float32(pos[2])
+	return m
 }
 
 // SetRotation sets the orientation represented by a rotation matrix.
