@@ -355,6 +355,14 @@ func (g GeomBase) Collide2(other Geom, data interface{}, cb NearCallback) {
 		(*C.dNearCallback)(C.callNearCallback))
 }
 
+func (g GeomBase) SpaceCollide2(other SimpleSpace, data interface{}, cb NearCallback) {
+	cbData := &nearCallbackData{fn: cb, data: data}
+	index := nearCallbackDataMap.Set(cbData)
+	defer nearCallbackDataMap.Delete(index)
+	C.dSpaceCollide2(g.c(), other.c2(), unsafe.Pointer(uintptr(index)),
+		(*C.dNearCallback)(C.callNearCallback))
+}
+
 // Next returns the next geometry.
 func (g GeomBase) Next() Geom {
 	return cToGeom(C.dBodyGetNextGeom(g.c()))
