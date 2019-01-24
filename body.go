@@ -1,5 +1,6 @@
 package ode
 
+// #define dDOUBLE
 // #include <ode/ode.h>
 // extern void callMovedCallback(dBodyID body);
 import "C"

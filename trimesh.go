@@ -1,5 +1,6 @@
 package ode
 
+// #define dDOUBLE
 // #include <ode/ode.h>
 // extern int callTriCallback(dGeomID mesh, dGeomID other, int index);
 // extern int callTriRayCallback(dGeomID mesh, dGeomID ray, int index, dReal u, dReal v);

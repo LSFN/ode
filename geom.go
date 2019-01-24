@@ -1,5 +1,6 @@
 package ode
 
+// #define dDOUBLE
 // #include <ode/ode.h>
 // extern void callNearCallback(void *data, dGeomID obj1, dGeomID obj2);
 import "C"

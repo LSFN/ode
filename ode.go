@@ -3,6 +3,7 @@
 package ode
 
 // #cgo LDFLAGS: -lode
+// #define dDOUBLE
 // #include <ode/ode.h>
 import "C"
 
